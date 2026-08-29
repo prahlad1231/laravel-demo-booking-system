@@ -1,0 +1,27 @@
+{
+    "preset": "laravel",
+    "rules": {
+        "braces_position": {
+            "functions_opening_brace": "same_line",
+            "classes_opening_brace": "same_line",
+            "anonymous_classes_opening_brace": "same_line"
+        },
+        "class_attributes_separation": {
+            "elements": {
+                "const": "none",
+                "method": "one",
+                "property": "one",
+                "trait_import": "none",
+                "case": "none"
+            }
+        },
+        "concat_space": { "spacing": "one" },
+        "array_indentation": true,
+        "fully_qualified_strict_types": true,
+        "method_chaining_indentation": true,
+        "modernize_strpos": true,
+        "native_function_invocation": { "include": ["@all"] },
+        "return_assignment": true,
+        "use_arrow_functions": true
+    }
+}
