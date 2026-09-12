@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\ReservationStatus;
+use Database\Factories\ReservationFactory;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -27,6 +28,7 @@ use Illuminate\Support\Carbon;
  * @property-read Collection<int, AddOn> $addOns
  */
 class Reservation extends Model {
+    /** @use HasFactory<ReservationFactory> */
     use HasFactory, SoftDeletes;
 
     protected $fillable = ['space_id', 'user_id', 'starts_at', 'ends_at', 'capacity_used', 'status'];
