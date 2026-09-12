@@ -12,13 +12,13 @@ use Illuminate\Support\Carbon;
 
 /**
  * @property int $id
- * @property-read Organisation $organisation
  * @property int $organisation_id
  * @property string $name
  * @property int $capacity
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
+ * @property-read Organisation $organisation
  * @property-read Collection<int, Reservation> $reservations
  */
 class Space extends Model {

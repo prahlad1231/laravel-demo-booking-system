@@ -18,8 +18,6 @@ use Illuminate\Support\Carbon;
 class AddOnReservation extends Pivot {
     protected $table = 'add_on_reservation';
 
-    protected $fillable = ['quantity'];
-
     public function addOn(): BelongsTo {
         return $this->belongsTo(AddOn::class);
     }

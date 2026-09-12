@@ -26,6 +26,10 @@ class AddOn extends Model {
 
     protected $fillable = ['organisation_id', 'name', 'price_cents'];
 
+    protected function casts(): array {
+        return ['price_cents' => 'integer'];
+    }
+
     public function organisation(): BelongsTo {
         return $this->belongsTo(Organisation::class);
     }
