@@ -18,7 +18,19 @@ class OrganisationFactory extends Factory {
     public function definition(): array {
         return [
             'name' => \fake()->company(),
-            'type' => \fake()->randomElement(OrganisationType::cases()),
+            'type' => OrganisationType::Attraction,
         ];
+    }
+
+    public function attraction(): static {
+        return $this->state(['type' => OrganisationType::Attraction]);
+    }
+
+    public function school(): static {
+        return $this->state(['type' => OrganisationType::School]);
+    }
+
+    public function tourOperator(): static {
+        return $this->state(['type' => OrganisationType::TourOperator]);
     }
 }
