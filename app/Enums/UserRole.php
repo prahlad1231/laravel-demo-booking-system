@@ -2,12 +2,10 @@
 
 namespace App\Enums;
 
-enum UserRole: string
-{
+enum UserRole: string {
     case Admin = 'admin';
-    case AttractionOwner = 'attraction_owner';
-    case AttractionAdmin = 'attraction_admin';
-    case AttractionReceptionist = 'attraction_receptionist';
-    case SchoolUser = 'school_user';
-    case Individual = 'individual';
+    case Owner = 'owner';
+    case Manager = 'manager';
+    case Receptionist = 'receptionist';
+    case Customer = 'customer';
 }
