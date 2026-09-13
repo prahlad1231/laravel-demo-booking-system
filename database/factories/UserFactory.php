@@ -30,7 +30,7 @@ class UserFactory extends Factory {
             'email_verified_at' => \now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
-            'role' => UserRole::Individual,
+            'role' => UserRole::Customer,
             'organisation_id' => null,
         ];
     }
@@ -39,36 +39,29 @@ class UserFactory extends Factory {
         return $this->state(['role' => UserRole::Admin]);
     }
 
-    public function attractionOwner(): static {
+    public function owner(): static {
         return $this->state([
-            'role' => UserRole::AttractionOwner,
+            'role' => UserRole::Owner,
             'organisation_id' => Organisation::factory(),
         ]);
     }
 
-    public function attractionAdmin(): static {
+    public function manager(): static {
         return $this->state([
-            'role' => UserRole::AttractionAdmin,
+            'role' => UserRole::Manager,
             'organisation_id' => Organisation::factory(),
         ]);
     }
 
-    public function attractionReceptionist(): static {
+    public function receptionist(): static {
         return $this->state([
-            'role' => UserRole::AttractionReceptionist,
+            'role' => UserRole::Receptionist,
             'organisation_id' => Organisation::factory(),
         ]);
     }
 
-    public function schoolUser(): static {
-        return $this->state([
-            'role' => UserRole::SchoolUser,
-            'organisation_id' => Organisation::factory(),
-        ]);
-    }
-
-    public function individual(): static {
-        return $this->state(['role' => UserRole::Individual]);
+    public function customer(): static {
+        return $this->state(['role' => UserRole::Customer]);
     }
 
     /**
