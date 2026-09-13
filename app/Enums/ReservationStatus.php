@@ -2,8 +2,7 @@
 
 namespace App\Enums;
 
-enum ReservationStatus: string
-{
+enum ReservationStatus: string {
     case Pending = 'pending';
     case Confirmed = 'confirmed';
     case Declined = 'declined';
