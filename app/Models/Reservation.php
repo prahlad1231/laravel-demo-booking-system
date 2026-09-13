@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Enums\ReservationStatus;
 use Database\Factories\ReservationFactory;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -50,5 +52,10 @@ class Reservation extends Model {
             ->using(AddOnReservation::class)
             ->withPivot('quantity')
             ->withTimestamps();
+    }
+
+    #[Scope]
+    protected function active(Builder $query): void {
+        $query->whereIn('status', [ReservationStatus::Confirmed, ReservationStatus::Pending]);
     }
 }
