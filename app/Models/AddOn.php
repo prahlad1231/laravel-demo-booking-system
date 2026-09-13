@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Database\Factories\AddOnFactory;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -19,6 +20,7 @@ use Illuminate\Support\Carbon;
  * @property int $organisation_id
  * @property string $name
  * @property int $price_cents
+ * @property-read float $price
  * @property-read Organisation $organisation
  * @property-read Collection<int, Reservation> $reservations
  */
@@ -41,5 +43,11 @@ class AddOn extends Model {
             ->using(AddOnReservation::class)
             ->withPivot('quantity')
             ->withTimestamps();
+    }
+
+    protected function price(): Attribute {
+        return Attribute::make(
+            get: fn (mixed $value, array $attributes) => (float) ($attributes['price_cents'] / 100),
+        );
     }
 }
