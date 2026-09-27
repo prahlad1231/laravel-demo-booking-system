@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Actions\CreateReservation;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\IndexReservationsRequest;
 use App\Http\Requests\StoreReservationRequest;
@@ -23,8 +24,8 @@ class SpaceReservationController extends Controller {
         );
     }
 
-    public function store(StoreReservationRequest $reservationRequest, Space $space): JsonResponse {
-        $reservation = $space->reservations()->create($reservationRequest->validated());
+    public function store(StoreReservationRequest $reservationRequest, Space $space, CreateReservation $createReservationAction): JsonResponse {
+        $reservation = $createReservationAction->handle($space, $reservationRequest->user(), $reservationRequest->validated());
 
         return (new ReservationResource($reservation))->response()->setStatusCode(Response::HTTP_CREATED);
     }

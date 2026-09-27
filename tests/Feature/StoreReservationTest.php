@@ -4,6 +4,11 @@ use App\Enums\ReservationStatus;
 use App\Models\Reservation;
 use App\Models\Space;
 use App\Models\User;
+use Laravel\Sanctum\Sanctum;
+
+\beforeEach(function () {
+    Sanctum::actingAs(User::factory()->create());
+});
 
 \it('rejects a booking that exceeds the capacity', function () {
     $space = Space::factory()->create(['capacity' => 10]);
@@ -22,4 +27,17 @@ use App\Models\User;
     ])
         ->assertStatus(422)
         ->assertJsonValidationErrors('capacity_used');
+});
+
+\it('creates a reservation', function () {
+    $space = Space::factory()->create(['capacity' => 10]);
+
+    $this->postJson(\route('v1.spaces.reservations.store', $space), [
+        'starts_at' => '2026-10-02 10:00',
+        'ends_at' => '2026-10-02 12:00',
+        'capacity_used' => 5,
+        'user_id' => User::factory()->create()->id,
+    ])->assertCreated();
+
+    \expect(Reservation::count())->toBe(1);
 });

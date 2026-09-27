@@ -31,7 +31,6 @@ class StoreReservationRequest extends FormRequest {
                     $this->date('ends_at'),
                 ),
             ],
-            'user_id' => ['required', 'exists:users,id'],
         ];
     }
 }
