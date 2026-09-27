@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\ReservationStatus;
+use Carbon\CarbonInterface;
 use Database\Factories\ReservationFactory;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
@@ -57,5 +58,11 @@ class Reservation extends Model {
     #[Scope]
     protected function active(Builder $query): void {
         $query->whereIn('status', [ReservationStatus::Confirmed, ReservationStatus::Pending]);
+    }
+
+    #[Scope]
+    protected function overlapping(Builder $query, CarbonInterface $startsAt, CarbonInterface $endsAt): void {
+        $query->where('starts_at', '<', $endsAt)
+            ->where('ends_at', '>', $startsAt);
     }
 }

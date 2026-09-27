@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\FitsWithinCapacity;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -22,7 +23,14 @@ class StoreReservationRequest extends FormRequest {
         return [
             'starts_at' => ['required', 'date', 'after:now'],
             'ends_at' => ['required', 'date', 'after:starts_at'],
-            'capacity_used' => ['required', 'integer', 'min:1'],
+            'capacity_used' => [
+                'required', 'integer', 'min:1',
+                new FitsWithinCapacity(
+                    $this->route('space'),
+                    $this->date('starts_at'),
+                    $this->date('ends_at'),
+                ),
+            ],
             'user_id' => ['required', 'exists:users,id'],
         ];
     }
