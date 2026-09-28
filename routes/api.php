@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\V1\ReservationController;
 use App\Http\Controllers\Api\V1\SpaceController;
 use App\Http\Controllers\Api\V1\SpaceReservationController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\V1\NotificationController;
 
 Route::prefix('v1')->name('v1.')->middleware('auth:sanctum')->group(function () {
     Route::get('spaces', [SpaceController::class, 'index'])->name('spaces.index');
@@ -14,4 +15,6 @@ Route::prefix('v1')->name('v1.')->middleware('auth:sanctum')->group(function () 
         ->can('update', 'reservation');
     Route::delete('reservations/{reservation}', [ReservationController::class, 'destroy'])->name('reservations.destroy')
         ->can('delete', 'reservation');
+
+    Route::get('notifications', [NotificationController::class, 'index'])->name('notifications.index');
 });
