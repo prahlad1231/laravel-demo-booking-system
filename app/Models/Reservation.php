@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\ReservationStatus;
+use App\Events\ReservationCreated;
 use Carbon\CarbonInterface;
 use Database\Factories\ReservationFactory;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -65,4 +66,8 @@ class Reservation extends Model {
         $query->where('starts_at', '<', $endsAt)
             ->where('ends_at', '>', $startsAt);
     }
+
+    protected $dispatchesEvents = [
+        'created' => ReservationCreated::class,
+    ];
 }
