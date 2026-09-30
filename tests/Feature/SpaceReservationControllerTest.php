@@ -6,7 +6,7 @@ use App\Models\User;
 use Laravel\Sanctum\Sanctum;
 
 \beforeEach(function () {
-    Sanctum::actingAs(User::factory()->create());
+    Sanctum::actingAs(User::factory()->admin()->create());
 });
 
 \it('returns space reservation', function () {
@@ -85,4 +85,18 @@ use Laravel\Sanctum\Sanctum;
     $this->getJson(\route('v1.spaces.reservations.index', ['space' => $space, 'from' => '2026-10-10', 'to' => 'next tuesday']))
         ->assertStatus(422)
         ->assertJsonValidationErrors('to');
+});
+
+\it('shows a customer only their own reservations', function () {
+    $space = Space::factory()->create();
+    $customer = User::factory()->customer()->create();
+
+    Reservation::factory(2)->for($space)->for($customer)->create();
+    Reservation::factory(3)->for($space)->create();
+
+    Sanctum::actingAs($customer);
+
+    $this->getJson(\route('v1.spaces.reservations.index', $space))
+        ->assertOk()
+        ->assertJsonCount(2, 'data');
 });
