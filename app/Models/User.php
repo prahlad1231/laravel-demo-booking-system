@@ -57,11 +57,15 @@ class User extends Authenticatable {
         return $this->hasMany(Reservation::class);
     }
 
+    public function isStaff(): bool {
+        return \in_array($this->role, [UserRole::Receptionist, UserRole::Manager, UserRole::Owner], true);
+    }
+
     public function isStaffOf(?int $organisationId): bool {
         if ($this->role === UserRole::Admin) {
             return true;
         }
 
-        return $organisationId !== null && $this->organisation_id === $organisationId && \in_array($this->role, [UserRole::Owner, UserRole::Manager, UserRole::Receptionist], true);
+        return $organisationId !== null && $this->organisation_id === $organisationId && $this->isStaff();
     }
 }
