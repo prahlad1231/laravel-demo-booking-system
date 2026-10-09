@@ -13,17 +13,19 @@ use Laravel\Sanctum\Sanctum;
 });
 
 \it('rejects a booking that exceeds the capacity', function () {
+    $startsAt = \now()->addDay()->setTime(10, 0);
+
     $space = Space::factory()->create(['capacity' => 10]);
     Reservation::factory()->for($space)->create([
-        'starts_at' => '2026-10-02 10:00',
-        'ends_at' => '2026-10-02 13:00',
+        'starts_at' => $startsAt,
+        'ends_at' => $startsAt->addHours(3),
         'capacity_used' => 8,
         'status' => ReservationStatus::Confirmed,
     ]);
 
     $this->postJson(\route('v1.spaces.reservations.store', $space), [
-        'starts_at' => '2026-10-02 11:00',
-        'ends_at' => '2026-10-02 13:00',
+        'starts_at' => $startsAt->addHour()->format('Y-m-d H:i'),
+        'ends_at' => $startsAt->addHours(3)->format('Y-m-d H:i'),
         'capacity_used' => 3,
         'user_id' => User::factory()->create()->id,
     ])
@@ -32,11 +34,13 @@ use Laravel\Sanctum\Sanctum;
 });
 
 \it('creates a reservation', function () {
+    $startsAt = \now()->addDay()->setTime(10, 0);
+
     $space = Space::factory()->create(['capacity' => 10]);
 
     $this->postJson(\route('v1.spaces.reservations.store', $space), [
-        'starts_at' => '2026-10-02 10:00',
-        'ends_at' => '2026-10-02 12:00',
+        'starts_at' => $startsAt->format('Y-m-d H:i'),
+        'ends_at' => $startsAt->addHours(2)->format('Y-m-d H:i'),
         'capacity_used' => 5,
         'user_id' => User::factory()->create()->id,
     ])->assertCreated();
@@ -47,6 +51,8 @@ use Laravel\Sanctum\Sanctum;
 \it('notifies attraction staff when a reservation is created', function () {
     Notification::fake();
 
+    $startsAt = \now()->addDay()->setTime(10, 0);
+
     $organisation = Organisation::factory()->attraction()->create();
     $space = Space::factory()->for($organisation)->create(['capacity' => 10]);
     $manager = User::factory()->manager()->recycle($organisation)->create();
@@ -55,8 +61,8 @@ use Laravel\Sanctum\Sanctum;
     Sanctum::actingAs(User::factory()->customer()->create());
 
     $this->postJson(\route('v1.spaces.reservations.store', $space), [
-        'starts_at' => '2026-10-02 10:00',
-        'ends_at' => '2026-10-02 12:00',
+        'starts_at' => $startsAt->format('Y-m-d H:i'),
+        'ends_at' => $startsAt->addHours(2)->format('Y-m-d H:i'),
         'capacity_used' => 5,
     ])->assertCreated();
 
