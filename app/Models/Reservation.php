@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\ReservationStatus;
+use App\Enums\UserRole;
 use App\Events\ReservationCreated;
 use Carbon\CarbonInterface;
 use Database\Factories\ReservationFactory;
@@ -65,6 +66,22 @@ class Reservation extends Model {
     protected function overlapping(Builder $query, CarbonInterface $startsAt, CarbonInterface $endsAt): void {
         $query->where('starts_at', '<', $endsAt)
             ->where('ends_at', '>', $startsAt);
+    }
+
+    #[Scope]
+    protected function visibleTo(Builder $query, User $user): void {
+        if ($user->role === UserRole::Admin) {
+            return;
+        }
+
+        if (! $user->isStaff()) {
+            $query->where('user_id', $user->id);
+
+            return;
+        }
+
+        $query->where('user_id', $user->id)
+            ->orWhereHas('space', fn (Builder $q) => $q->where('organisation_id', $user->organisation_id));
     }
 
     protected $dispatchesEvents = [

@@ -20,8 +20,7 @@ class SpaceReservationController extends Controller {
 
         return ReservationResource::collection(
             $space->reservations()
-                ->unless($user->isStaffOf($space->organisation_id),
-                    fn (Builder $q) => $q->where('user_id', $user->id))
+                ->visibleTo($user)
                 ->when($reservationsRequest->date('from'), fn (Builder $q, CarbonImmutable $from) => $q->where('starts_at', '>=', $from))
                 ->when($reservationsRequest->date('to'), fn (Builder $q, CarbonImmutable $to) => $q->where('starts_at', '<', $to->addDay()))
                 ->cursorPaginate()
