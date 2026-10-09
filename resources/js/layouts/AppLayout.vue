@@ -1,5 +1,6 @@
 <script setup lang="ts">
     import {Link} from "@inertiajs/vue3";
+    import {destroy} from "@/actions/App/Http/Controllers/Web/AuthenticatedSessionController";
 </script>
 
 <template>
@@ -8,6 +9,7 @@
             <div class="mx-auto flex max-w-5xl items-center gap-6 px-4 py-3">
                 <span class="font-semibold">Demo Booking System</span>
                 <Link href="/spaces" class="text-sm text-gray-600 hover:text-gray-900">Spaces</Link>
+                <Link :href="destroy()" class="text-sm text-gray-600 hover:text-gray-900">Logout</Link>
             </div>
         </nav>
 

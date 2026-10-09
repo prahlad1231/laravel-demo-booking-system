@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { Head } from '@inertiajs/vue3';
+import {Head, Link} from '@inertiajs/vue3';
+import Login from "@/pages/Auth/Login.vue";
 </script>
 
 <template>
@@ -8,8 +9,9 @@ import { Head } from '@inertiajs/vue3';
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
     </Head>
     <div
-        class="flex min-h-screen flex-col items-center bg-[#FDFDFC] p-6 text-[#1b1b18] lg:justify-center lg:p-8 dark:bg-[#0a0a0a]"
+        class="flex min-h-screen flex-col items-center bg-[#FDFDFC] p-6 text-[#1b1b18] lg:justify-center lg:p-8"
     >
        <h1>Welcome to Laravel</h1>
+        <Link href="/login">Login</Link>
     </div>
 </template>
